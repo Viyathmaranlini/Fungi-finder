@@ -1,4 +1,4 @@
-## Fungi-finder
+## Fungi-finder 🍄
 AI-powered web application for wild mushroom identification and toxicity detection with record management and statistical software.
 
 ## About
