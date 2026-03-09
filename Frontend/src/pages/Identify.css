@@ -1,0 +1,243 @@
+.identify {
+  padding: 30px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.identify h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.identify-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .identify-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.drop-zone {
+  background: rgba(255, 255, 255, 0.1);
+  border: 3px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 60px 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop-zone:hover {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.drop-zone.has-image {
+  padding: 10px;
+  border-style: solid;
+  border-color: #4CAF50;
+}
+
+.drop-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.upload-icon {
+  font-size: 4rem;
+}
+
+.upload-hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 350px;
+  border-radius: 15px;
+  object-fit: contain;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.identify-btn {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  max-width: 300px;
+}
+
+.identify-btn:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+.identify-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+.reset-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 15px 30px;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.error-message {
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid #f44336;
+  color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.result-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  color: #333;
+}
+
+.result-section h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #1a472a;
+}
+
+.main-result {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.main-result.toxicity-edible {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border: 2px solid #4CAF50;
+}
+
+.main-result.toxicity-suspicious {
+  background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+  border: 2px solid #FF9800;
+}
+
+.main-result.toxicity-poisonous {
+  background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+  border: 2px solid #f44336;
+}
+
+.toxicity-icon {
+  font-size: 3.5rem;
+}
+
+.result-details h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #1a472a;
+}
+
+.confidence {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.toxicity-label {
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.safety-warning {
+  background: #FFF9C4;
+  border-left: 4px solid #FFC107;
+  padding: 15px 20px;
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.other-predictions {
+  margin-top: 20px;
+}
+
+.other-predictions h4 {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+.prediction-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.prediction-item.toxicity-edible {
+  background: #E8F5E9;
+}
+
+.prediction-item.toxicity-suspicious {
+  background: #FFF3E0;
+}
+
+.prediction-item.toxicity-poisonous {
+  background: #FFEBEE;
+}
+
+.pred-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.pred-confidence {
+  color: #666;
+}

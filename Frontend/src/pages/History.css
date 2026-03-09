@@ -1,0 +1,252 @@
+.history {
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.history-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.refresh-btn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: #fff;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #00b894;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #fff;
+}
+
+.error-state span {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.error-state button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  border: none;
+  border-radius: 25px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* No Records */
+.no-records {
+  text-align: center;
+  padding: 100px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.no-records span {
+  font-size: 5rem;
+}
+
+.no-records h3 {
+  color: #fff;
+  margin: 20px 0 10px;
+}
+
+.no-records p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Records Stats */
+.records-stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.records-stats .stat {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px 35px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00b894;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+/* Records Grid */
+.records-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.record-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.record-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.record-card.toxicity-edible { border-left: 4px solid #00b894; }
+.record-card.toxicity-suspicious { border-left: 4px solid #fdcb6e; }
+.record-card.toxicity-poisonous { border-left: 4px solid #ff7675; }
+
+.record-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.record-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.toxicity-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.toxicity-badge.edible {
+  background: rgba(0, 184, 148, 0.9);
+  color: #fff;
+}
+
+.toxicity-badge.suspicious {
+  background: rgba(253, 203, 110, 0.9);
+  color: #333;
+}
+
+.toxicity-badge.poisonous {
+  background: rgba(255, 118, 117, 0.9);
+  color: #fff;
+}
+
+.record-content {
+  padding: 25px;
+}
+
+.record-content h3 {
+  color: #fff;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.record-details p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.record-details strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.record-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.delete-btn {
+  padding: 10px 20px;
+  background: rgba(255, 118, 117, 0.2);
+  border: 1px solid rgba(255, 118, 117, 0.5);
+  border-radius: 10px;
+  color: #ff7675;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: #ff7675;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .history-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .records-stats {
+    justify-content: center;
+  }
+
+  .records-grid {
+    grid-template-columns: 1fr;
+  }
+}
