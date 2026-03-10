@@ -1,0 +1,7 @@
+combined_data/
+data/
+*.h5
+train_env/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
