@@ -37,3 +37,34 @@ The system helps users in Sri Lanka identify wild mushrooms, assess their toxici
 | AI Service | Pillow | Image preprocessing |
 | Database | MongoDB Atlas | Cloud NoSQL database |
 | Training | Google Colab | GPU-accelerated model training |
+
+
+## Project Structure
+ 
+```
+mushroom-safety-system/
+├── frontend/               # React.js frontend application
+│   ├── public/
+│   ├── src/
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Page components
+│   │   ├── App.js          # Main app with routing
+│   │   └── App.css         # Global styles
+│   └── package.json
+│
+├── backend/                # Node.js + Express.js API server
+│   ├── models/             # Mongoose schemas (User, Identification)
+│   ├── routes/             # API route handlers (auth, identify, admin)
+│   ├── middleware/         # JWT auth and role-based access middleware
+│   ├── uploads/            # Stored mushroom images
+│   ├── server.js           # Main server entry point
+│   └── .env                # Environment variables (not committed)
+│
+├── ai-service/             # Flask AI prediction service
+│   ├── run_ai_service.py   # Flask server with prediction endpoint
+│   ├── model.h5            # Trained MobileNetV2 model (not committed)
+│   └── class_names.json    # Species class mapping
+│
+└── training/               # Model training scripts
+    └── train_model.ipynb   # Google Colab training notebook
+```
