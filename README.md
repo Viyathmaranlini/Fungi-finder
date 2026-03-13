@@ -68,3 +68,8 @@ mushroom-safety-system/
 └── training/               # Model training scripts
     └── train_model.ipynb   # Google Colab training notebook
 ```
+## Prerequisites
+ 
+- Node.js v18+
+- Python 3.9+
+- MongoDB Atlas account
