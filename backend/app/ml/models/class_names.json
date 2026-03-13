@@ -1,0 +1,22 @@
+{
+  "class_names": [
+    "Agaricus",
+    "Amanita",
+    "Boletus",
+    "Cortinarius",
+    "Edible_Fungi",
+    "Entoloma",
+    "Hygrocybe",
+    "Lactarius",
+    "Mushrooms",
+    "Poisonous_Fungi",
+    "Russula",
+    "Suillus"
+  ],
+  "num_classes": 12,
+  "total_images": 8611,
+  "training_rows": 6891,
+  "validation_rows": 1720,
+  "training_accuracy": 0.806994616985321,
+  "validation_accuracy": 0.7337209582328796
+}
