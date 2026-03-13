@@ -73,3 +73,20 @@ mushroom-safety-system/
 - Node.js v18+
 - Python 3.9+
 - MongoDB Atlas account
+
+## Installation and Setup
+ 
+### 1. Clone the repository
+ 
+```bash
+git clone https://github.com/YOUR_USERNAME/mushroom-safety-system.git
+cd mushroom-safety-system
+```
+ 
+### 2. Frontend Setup
+ 
+```bash
+cd frontend
+npm install
+npm start
+```
