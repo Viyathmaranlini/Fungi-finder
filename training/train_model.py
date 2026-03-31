@@ -1,6 +1,3 @@
-# ============================================================
-# TRAIN MUSHROOM MODEL ON YOUR PC - 8000+ IMAGES
-# ============================================================
 import os
 import zipfile
 import json
@@ -13,7 +10,6 @@ print("=" * 60)
 print("🍄 MUSHROOM AI MODEL TRAINING ON YOUR PC")
 print("=" * 60)
 
-# ============================================================
 print("\nSTEP 1: DOWNLOAD DATASETS")
 print("=" * 60)
 
@@ -39,7 +35,7 @@ for folder in ['data/dataset1', 'data/dataset2']:
 
 print("✅ Datasets ready!")
 
-# ============================================================
+
 print("\nSTEP 2: CLEAN AND COMBINE IMAGES")
 print("=" * 60)
 
@@ -123,7 +119,7 @@ if total_images >= 8000:
 
 gc.collect()
 
-# ============================================================
+
 print("\nSTEP 3: SETUP TENSORFLOW")
 print("=" * 60)
 
@@ -138,7 +134,7 @@ if gpus:
 else:
     print("⚠️ No GPU detected, using CPU (slower but works)")
 
-# ============================================================
+
 print("\nSTEP 4: CREATE DATA GENERATORS")
 print("=" * 60)
 
@@ -186,7 +182,7 @@ print(f"\n📊 Training rows: {train_gen.samples}")
 print(f"📊 Validation rows: {val_gen.samples}")
 print(f"📊 Total rows: {train_gen.samples + val_gen.samples}")
 
-# ============================================================
+
 print("\nSTEP 5: BUILD MODEL")
 print("=" * 60)
 
@@ -216,7 +212,7 @@ model.compile(
 
 print(f"✅ Model built! Parameters: {model.count_params():,}")
 
-# ============================================================
+
 print("\nSTEP 6: PHASE 1 - TRAIN TOP LAYERS (10 epochs)")
 print("=" * 60)
 
@@ -230,7 +226,7 @@ history1 = model.fit(
 phase1_acc = history1.history['val_accuracy'][-1]
 print(f"\n✅ Phase 1 Complete! Accuracy: {phase1_acc*100:.2f}%")
 
-# ============================================================
+
 print("\nSTEP 7: PHASE 2 - FINE-TUNE (10 epochs)")
 print("=" * 60)
 
@@ -260,7 +256,7 @@ print("=" * 60)
 print(f"Training Accuracy:   {final_train_acc*100:.2f}%")
 print(f"Validation Accuracy: {final_val_acc*100:.2f}%")
 
-# ============================================================
+
 print("\nSTEP 8: SAVE MODEL")
 print("=" * 60)
 
@@ -284,7 +280,7 @@ with open(f'{model_dir}/class_names.json', 'w') as f:
     }, f, indent=2)
 print(f"✅ Saved: {model_dir}/class_names.json")
 
-# ============================================================
+
 print("\nSTEP 9: TEST MODEL")
 print("=" * 60)
 
@@ -292,7 +288,7 @@ test_model = tf.keras.models.load_model(f'{model_dir}/mushroom_model.h5')
 test_pred = test_model.predict(np.random.rand(1, 224, 224, 3), verbose=0)
 print(f"✅ Model loads successfully!")
 
-# ============================================================
+
 print("\n" + "=" * 60)
 print("🎉 TRAINING COMPLETE!")
 print("=" * 60)

@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Paths - Updated for new .keras format
-MODEL_PATH = '../backend/app/ml/models/mushroom_model.keras'
+MODEL_PATH = '../backend/app/ml/models/mushroom_model.h5'
 CLASS_NAMES_PATH = '../backend/app/ml/models/class_names.json'
 
 print("=" * 50)
@@ -18,7 +18,7 @@ print("🍄 Loading Mushroom AI Model...")
 print("=" * 50)
 
 # Load model
-model = tf.keras.models.load_model(MODEL_PATH)
+model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 print("✅ Model loaded successfully!")
 
 # Load class names
