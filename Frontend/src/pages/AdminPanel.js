@@ -12,7 +12,14 @@ function AdminPanel({ user, token, setCurrentPage }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check if user is admin
+  useEffect(() => {
+    if (!user || user.role !== 'admin') return;
+    if (activeTab === 'overview') fetchDashboard();
+    else if (activeTab === 'users') fetchUsers();
+    else if (activeTab === 'records') fetchRecords();
+  }, [activeTab]);
+
+  // Check if user is admin - MUST be AFTER all hooks
   if (!user || user.role !== 'admin') {
     return (
       <div className="admin-panel">
@@ -75,12 +82,6 @@ function AdminPanel({ user, token, setCurrentPage }) {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (activeTab === 'overview') fetchDashboard();
-    else if (activeTab === 'users') fetchUsers();
-    else if (activeTab === 'records') fetchRecords();
-  }, [activeTab]);
 
   const handleRoleChange = async (userId, newRole) => {
     if (!window.confirm(`Change this user's role to ${newRole}?`)) return;
