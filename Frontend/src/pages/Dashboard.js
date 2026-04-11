@@ -24,7 +24,6 @@ function Dashboard({ token }) {
         setLastRefresh(new Date());
       }
     } catch (err) {
-      console.error('Error fetching stats:', err);
       setError('Failed to load dashboard data. Make sure the backend is running.');
     } finally {
       setLoading(false);

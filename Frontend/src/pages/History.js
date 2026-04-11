@@ -32,7 +32,6 @@ function History({ token, user }) {
 
       setRecords(response.data.data);
     } catch (err) {
-      console.error('Error fetching history:', err);
       setError('Failed to load history. Make sure backend is running.');
     } finally {
       setLoading(false);
@@ -50,7 +49,6 @@ function History({ token, user }) {
       });
       setRecords(records.filter(record => record._id !== id));
     } catch (err) {
-      console.error('Error deleting record:', err);
       alert('Failed to delete record');
     }
   };

@@ -44,7 +44,6 @@ function AdminPanel({ user, token, setCurrentPage }) {
         setDashboard(response.data.dashboard);
       }
     } catch (err) {
-      console.error('Error fetching admin dashboard:', err);
       setError('Failed to load admin dashboard.');
     } finally {
       setLoading(false);
@@ -61,7 +60,6 @@ function AdminPanel({ user, token, setCurrentPage }) {
         setUsers(response.data.users);
       }
     } catch (err) {
-      console.error('Error fetching users:', err);
     } finally {
       setLoading(false);
     }
@@ -77,7 +75,6 @@ function AdminPanel({ user, token, setCurrentPage }) {
         setRecords(response.data.records);
       }
     } catch (err) {
-      console.error('Error fetching records:', err);
     } finally {
       setLoading(false);
     }
