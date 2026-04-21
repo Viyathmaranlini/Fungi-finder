@@ -23,9 +23,14 @@ mongoose.connect(process.env.MONGODB_URI)
 // Import and register API route handlers
 const authRoutes = require('./routes/auth');
 const identifyRoutes = require('./routes/identify');
+const adminRoutes = require('./routes/admin');
+
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/identify', identifyRoutes);
+app.use('/api/admin', adminRoutes);
+
 
 // Health check endpoint - shows API status and available endpoints
 app.get('/', (req, res) => {
