@@ -5,12 +5,13 @@
   min-height: 100vh;
 }
 
+/* Header */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 35px;
-  padding-bottom: 25px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -67,11 +68,46 @@
   box-shadow: 0 6px 25px rgba(0, 184, 148, 0.4);
 }
 
+/* Danger Alert Banner */
+.danger-alert {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: rgba(255, 118, 117, 0.08);
+  border: 1px solid rgba(255, 118, 117, 0.25);
+  border-radius: 14px;
+  margin-bottom: 25px;
+  animation: alertPulse 3s ease-in-out infinite;
+}
+
+@keyframes alertPulse {
+  0%, 100% { border-color: rgba(255, 118, 117, 0.25); }
+  50% { border-color: rgba(255, 118, 117, 0.5); }
+}
+
+.danger-alert-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.danger-alert-content h4 {
+  color: #ff7675;
+  font-size: 0.95rem;
+  margin-bottom: 3px;
+}
+
+.danger-alert-content p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.82rem;
+}
+
+/* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 16px;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .stat-card {
@@ -159,11 +195,12 @@
   white-space: nowrap;
 }
 
+/* Charts Grid */
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .chart-card {
@@ -191,7 +228,7 @@
 }
 
 .chart-container {
-  height: 320px;
+  height: 300px;
   position: relative;
 }
 
@@ -207,6 +244,61 @@
   border-radius: 12px;
 }
 
+/* Top Species Ranking */
+.top-species-ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 300px;
+  justify-content: center;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s ease;
+}
+
+.ranking-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(5px);
+}
+
+.ranking-medal {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.ranking-info {
+  flex: 1;
+}
+
+.ranking-info h4 {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.ranking-info p {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+.ranking-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Activity Section */
 .activity-section {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -287,10 +379,6 @@
   font-weight: 500;
 }
 
-.activity-details p {
-  font-size: 0.8rem;
-}
-
 .toxicity-label {
   font-weight: 600;
   text-transform: capitalize;
@@ -318,7 +406,6 @@
 .quick-stats-list {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .quick-stat-item {
@@ -358,7 +445,7 @@
   background: rgba(255, 118, 117, 0.08);
 }
 
-/* Loading & Error States */
+/* Loading & Error */
 .dashboard-loading, .dashboard-error {
   display: flex;
   flex-direction: column;
@@ -383,7 +470,6 @@
 
 .dashboard-loading p {
   color: rgba(255, 255, 255, 0.4);
-  font-size: 0.95rem;
 }
 
 .dashboard-error span {

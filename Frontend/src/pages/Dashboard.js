@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Filler } from 'chart.js';
-import { Pie, Bar, Doughnut } from 'react-chartjs-2';
+import { Pie, Bar, Line, Doughnut } from 'react-chartjs-2';
 import axios from 'axios';
 import './Dashboard.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Filler);
- 
+
 const API_URL = 'http://localhost:5000/api';
- 
+
 function Dashboard({ token }) {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
- 
+
   const fetchStats = useCallback(async () => {
     try {
       setLoading(true);
@@ -29,11 +29,11 @@ function Dashboard({ token }) {
       setLoading(false);
     }
   }, []);
- 
+
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
- 
+
   // CSV Export
   const exportCSV = () => {
     if (!stats) return;
@@ -63,7 +63,7 @@ function Dashboard({ token }) {
     a.click();
     window.URL.revokeObjectURL(url);
   };
- 
+
   const timeAgo = (dateString) => {
     const diff = Math.floor((new Date() - new Date(dateString)) / 1000);
     if (diff < 60) return 'Just now';
@@ -71,7 +71,7 @@ function Dashboard({ token }) {
     if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
     return `${Math.floor(diff / 86400)} days ago`;
   };
- 
+
   const getToxicityIcon = (toxicity) => {
     switch (toxicity) {
       case 'edible': return '✅';
@@ -79,7 +79,16 @@ function Dashboard({ token }) {
       default: return '⚠️';
     }
   };
- 
+
+  const getToxicityBadge = (species) => {
+    const poisonous = ['amanita', 'cortinarius', 'entoloma', 'poisonous_fungi'];
+    const edible = ['agaricus', 'boletus', 'hygrocybe', 'lactarius', 'russula', 'suillus', 'edible_fungi'];
+    const name = species.toLowerCase();
+    if (poisonous.includes(name)) return { label: 'poisonous', color: '#ff7675', bg: 'rgba(255, 118, 117, 0.15)' };
+    if (edible.includes(name)) return { label: 'edible', color: '#00b894', bg: 'rgba(0, 184, 148, 0.15)' };
+    return { label: 'suspicious', color: '#fdcb6e', bg: 'rgba(253, 203, 110, 0.15)' };
+  };
+
   if (loading) {
     return (
       <div className="dashboard">
@@ -90,7 +99,7 @@ function Dashboard({ token }) {
       </div>
     );
   }
- 
+
   if (error) {
     return (
       <div className="dashboard">
@@ -103,10 +112,10 @@ function Dashboard({ token }) {
       </div>
     );
   }
- 
+
   if (!stats) return null;
- 
-  // Chart Data
+
+  // Toxicity Distribution Chart
   const toxicityData = {
     labels: ['Edible', 'Suspicious', 'Poisonous'],
     datasets: [{
@@ -116,7 +125,8 @@ function Dashboard({ token }) {
       borderWidth: 2,
     }]
   };
- 
+
+  // Weekly Bar Chart
   const getLast7Days = () => {
     const days = [];
     const counts = [];
@@ -130,9 +140,9 @@ function Dashboard({ token }) {
     }
     return { days, counts };
   };
- 
+
   const { days, counts } = getLast7Days();
- 
+
   const weeklyData = {
     labels: days,
     datasets: [{
@@ -144,11 +154,46 @@ function Dashboard({ token }) {
       borderRadius: 8,
     }]
   };
- 
+
+  // Monthly Trend Line Chart
+  const getLast6Months = () => {
+    const months = [];
+    const monthlyCounts = [];
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      const monthLabel = date.toLocaleDateString('en-US', { month: 'short' });
+      months.push(monthLabel);
+      const monthStr = date.toISOString().slice(0, 7);
+      const count = stats.dailyCounts?.filter(d => d._id.startsWith(monthStr)).reduce((sum, d) => sum + d.count, 0) || 0;
+      monthlyCounts.push(count);
+    }
+    return { months, monthlyCounts };
+  };
+
+  const { months, monthlyCounts } = getLast6Months();
+
+  const monthlyTrendData = {
+    labels: months,
+    datasets: [{
+      label: 'Monthly Identifications',
+      data: monthlyCounts,
+      borderColor: '#74b9ff',
+      backgroundColor: 'rgba(116, 185, 255, 0.1)',
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: '#74b9ff',
+      pointBorderColor: '#fff',
+      pointBorderWidth: 2,
+      pointRadius: 5,
+    }]
+  };
+
+  // Species Data
   const speciesLabels = stats.speciesDistribution?.map(s => s._id) || [];
   const speciesCounts = stats.speciesDistribution?.map(s => s.count) || [];
   const speciesColors = ['#00b894', '#ff7675', '#74b9ff', '#fdcb6e', '#a29bfe', '#fd79a8', '#00cec9', '#fab1a0', '#81ecec', '#636e72'];
- 
+
   const speciesData = {
     labels: speciesLabels,
     datasets: [{
@@ -157,19 +202,20 @@ function Dashboard({ token }) {
       borderWidth: 0,
     }]
   };
- 
-  const speciesBarData = {
-    labels: speciesLabels.slice(0, 8),
+
+  // Top Species Horizontal Bar
+  const topSpeciesData = {
+    labels: speciesLabels.slice(0, 6),
     datasets: [{
       label: 'Count',
-      data: speciesCounts.slice(0, 8),
-      backgroundColor: speciesColors.slice(0, 8).map(c => c + '99'),
-      borderColor: speciesColors.slice(0, 8),
+      data: speciesCounts.slice(0, 6),
+      backgroundColor: speciesColors.slice(0, 6).map(c => c + '99'),
+      borderColor: speciesColors.slice(0, 6),
       borderWidth: 2,
       borderRadius: 6,
     }]
   };
- 
+
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -180,7 +226,7 @@ function Dashboard({ token }) {
       }
     }
   };
- 
+
   const barOptions = {
     ...chartOptions,
     plugins: { ...chartOptions.plugins, legend: { display: false } },
@@ -189,11 +235,33 @@ function Dashboard({ token }) {
       x: { grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.7)' } }
     }
   };
- 
+
+  const horizontalBarOptions = {
+    ...chartOptions,
+    indexAxis: 'y',
+    plugins: { ...chartOptions.plugins, legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'rgba(255, 255, 255, 0.7)', stepSize: 1 } },
+      y: { grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.7)' } }
+    }
+  };
+
+  const lineOptions = {
+    ...chartOptions,
+    plugins: { ...chartOptions.plugins, legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'rgba(255, 255, 255, 0.7)', stepSize: 1 } },
+      x: { grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.7)' } }
+    }
+  };
+
+  // Calculations
   const ediblePercent = stats.total > 0 ? ((stats.edible / stats.total) * 100).toFixed(1) : 0;
   const poisonousPercent = stats.total > 0 ? ((stats.poisonous / stats.total) * 100).toFixed(1) : 0;
   const suspiciousPercent = stats.total > 0 ? ((stats.suspicious / stats.total) * 100).toFixed(1) : 0;
- 
+  const showDangerAlert = stats.total > 0 && parseFloat(poisonousPercent) > 10;
+  const top3Species = stats.speciesDistribution?.slice(0, 3) || [];
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
@@ -208,7 +276,18 @@ function Dashboard({ token }) {
           <button className="export-btn" onClick={exportCSV}>📥 Export CSV</button>
         </div>
       </div>
- 
+
+      {/* Danger Alert Banner */}
+      {showDangerAlert && (
+        <div className="danger-alert">
+          <span className="danger-alert-icon">⚠️</span>
+          <div className="danger-alert-content">
+            <h4>Danger Alert: {poisonousPercent}% of identifications are poisonous species</h4>
+            <p>{stats.poisonous} poisonous mushrooms detected. All users have been warned with safety alerts.</p>
+          </div>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className="stats-grid">
         <div className="stat-card primary">
@@ -254,8 +333,8 @@ function Dashboard({ token }) {
           </div>
         </div>
       </div>
- 
-      {/* Charts */}
+
+      {/* Charts Row 1 */}
       <div className="charts-grid">
         <div className="chart-card">
           <h3>🥧 Toxicity Distribution</h3>
@@ -273,6 +352,30 @@ function Dashboard({ token }) {
             <Bar data={weeklyData} options={barOptions} />
           </div>
         </div>
+      </div>
+
+      {/* Charts Row 2 */}
+      <div className="charts-grid">
+        <div className="chart-card">
+          <h3>📈 Monthly Trend</h3>
+          <div className="chart-container">
+            <Line data={monthlyTrendData} options={lineOptions} />
+          </div>
+        </div>
+        <div className="chart-card">
+          <h3>🏆 Top Species (Ranking)</h3>
+          <div className="chart-container">
+            {speciesLabels.length > 0 ? (
+              <Bar data={topSpeciesData} options={horizontalBarOptions} />
+            ) : (
+              <div className="no-data">No species data yet</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Row 3 */}
+      <div className="charts-grid">
         <div className="chart-card">
           <h3>🍄 Species Distribution</h3>
           <div className="chart-container">
@@ -284,17 +387,32 @@ function Dashboard({ token }) {
           </div>
         </div>
         <div className="chart-card">
-          <h3>📈 Top Species (Count)</h3>
-          <div className="chart-container">
-            {speciesLabels.length > 0 ? (
-              <Bar data={speciesBarData} options={barOptions} />
+          <h3>🥇 Top 3 Most Identified</h3>
+          <div className="top-species-ranking">
+            {top3Species.length > 0 ? (
+              top3Species.map((species, index) => {
+                const badge = getToxicityBadge(species._id);
+                const medals = ['🥇', '🥈', '🥉'];
+                return (
+                  <div key={species._id} className="ranking-item">
+                    <span className="ranking-medal">{medals[index]}</span>
+                    <div className="ranking-info">
+                      <h4>{species._id}</h4>
+                      <p>{species.count} identifications</p>
+                    </div>
+                    <span className="ranking-badge" style={{ color: badge.color, background: badge.bg }}>
+                      {badge.label}
+                    </span>
+                  </div>
+                );
+              })
             ) : (
               <div className="no-data">No species data yet</div>
             )}
           </div>
         </div>
       </div>
- 
+
       {/* Bottom Section */}
       <div className="activity-section">
         <div className="activity-card">
@@ -316,7 +434,7 @@ function Dashboard({ token }) {
             )}
           </div>
         </div>
- 
+
         <div className="quick-stats-card">
           <h3>⚡ Quick Stats</h3>
           <div className="quick-stats-list">
@@ -352,5 +470,5 @@ function Dashboard({ token }) {
     </div>
   );
 }
- 
+
 export default Dashboard;
