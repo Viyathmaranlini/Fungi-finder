@@ -37,6 +37,24 @@ function Chatbot() {
     
     'help': "🤖 **I can help you with:**\n\n• Type **'poisonous'** - Learn about dangerous mushrooms\n• Type **'edible'** - Learn about safe mushrooms\n• Type **'emergency'** - Get emergency procedures\n• Type **'identify'** - Tips for identification\n• Type **'amanita'** - Info about deadly Amanita\n• Type **'safe'** - Safety guidelines\n\nOr ask me any question about mushrooms! 🍄",
     
+    'boletus': "🍄 **Boletus (Porcini)**\n\nMostly edible and highly prized:\n• **Boletus edulis** - King Bolete, excellent flavor\n• **Boletus badius** - Bay Bolete, good edible\n• Found in forests near oak and pine trees\n• Has spongy pores instead of gills\n\n⚠️ Some Boletus species stain blue when cut - avoid those!",
+
+    'cortinarius': "☠️ **Cortinarius - DANGEROUS!**\n\nMany species are highly toxic:\n• **Cortinarius rubellus** - Deadly Webcap, causes kidney failure\n• **Cortinarius orellanus** - Fool's Webcap, equally deadly\n• Symptoms may appear 2-14 DAYS after eating\n• No known antidote for severe cases\n\n⚠️ NEVER eat any Cortinarius species!",
+
+    'lactarius': "🍄 **Lactarius (Milk Caps)**\n\nMixed edibility:\n• **Lactarius deliciosus** - Saffron Milk Cap, edible and tasty\n• **Lactarius torminosus** - Woolly Milk Cap, toxic raw\n• Produces milky liquid when cut\n• Color of milk helps identification\n\n⚠️ Only eat well-known edible species, properly cooked!",
+
+    'russula': "🍄 **Russula (Brittlegills)**\n\nLarge genus with mixed edibility:\n• Many edible species exist\n• **Taste test:** mild taste = likely edible, spicy/bitter = avoid\n• Brittle flesh that crumbles easily\n• Colorful caps in red, green, yellow, purple\n\n⚠️ Never rely on taste test alone - always verify with expert!",
+
+    'hygrocybe': "🍄 **Hygrocybe (Waxcaps)**\n\nGenerally safe but not commonly eaten:\n• Bright, waxy-looking caps\n• Found in grasslands and meadows\n• Often bright red, orange, or yellow\n• Good indicators of old, unimproved grassland\n\n✅ Most species are non-toxic but not popular for eating.",
+
+    'entoloma': "⚠️ **Entoloma - CAUTION!**\n\nMany species are toxic:\n• **Entoloma sinuatum** - Livid Pinkgill, causes severe gastric upset\n• Pink spore print is distinctive\n• Often confused with edible species\n• Can cause severe vomiting and diarrhea\n\n⚠️ Avoid all Entoloma species unless expert-confirmed!",
+
+    'suillus': "🍄 **Suillus (Slippery Jacks)**\n\nGenerally edible:\n• **Suillus luteus** - Slippery Jack, edible\n• Slimy cap surface when wet\n• Found under pine trees\n• Remove slimy skin before cooking\n\n✅ Most species are edible but not highly regarded for taste.",
+
+    'firstaid': "🏥 **First Aid for Mushroom Poisoning**\n\n**Immediate Steps:**\n1. **Stop eating** the mushroom immediately\n2. **Call 119** (Sri Lanka Emergency) or **1990** (Ambulance)\n3. **Do NOT induce vomiting**\n4. **Save the mushroom** or take a photo for doctors\n5. **Note the time** of consumption\n\n**Sri Lanka Emergency Contacts:**\n• 🚨 Emergency: **119**\n• 🚑 Ambulance: **1990**\n• ☎️ Poison Centre: **+94 11 2691111**\n\n**Symptoms to watch for:**\n• Nausea and vomiting (30 min - 6 hours)\n• Diarrhea and abdominal pain\n• Dizziness and confusion",
+
+    'srilanka': "🇱🇰 **Mushroom Foraging in Sri Lanka**\n\nCommon wild mushrooms in Sri Lanka:\n• Found mainly during rainy season (May-November)\n• Common in Central, Sabaragamuwa, and Uva provinces\n• Rural communities traditionally forage for mushrooms\n\n**Safety Tips for Sri Lankan Foragers:**\n• Traditional knowledge may not always be accurate\n• Climate change is affecting mushroom distribution\n• Always verify identification before consuming\n\n**Emergency: Call 119 immediately if poisoning suspected!**",
+
     'default': "I'm here to help with mushroom-related questions! 🍄\n\nYou can ask me about:\n• Specific mushroom species\n• Toxicity levels\n• Identification tips\n• Safety guidelines\n• Emergency procedures\n\nType **'help'** for a list of topics I can assist with!"
   };
 
