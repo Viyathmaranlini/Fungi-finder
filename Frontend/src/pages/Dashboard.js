@@ -34,32 +34,71 @@ function Dashboard({ token }) {
     fetchStats();
   }, [fetchStats]);
 
-  // CSV Export
+ // CSV Export 
   const exportCSV = () => {
     if (!stats) return;
+    const edPct = stats.total > 0 ? ((stats.edible / stats.total) * 100).toFixed(1) : 0;
+    const poisPct = stats.total > 0 ? ((stats.poisonous / stats.total) * 100).toFixed(1) : 0;
+    const susPct = stats.total > 0 ? ((stats.suspicious / stats.total) * 100).toFixed(1) : 0;
+
     let csv = 'Mushroom Safety System - Dashboard Report\n';
-    csv += `Generated: ${new Date().toLocaleString()}\n\n`;
+    csv += `Generated,${new Date().toLocaleString()}\n\n`;
+
     csv += 'SUMMARY STATISTICS\n';
-    csv += `Total Identifications,${stats.total}\n`;
-    csv += `Edible Found,${stats.edible}\n`;
-    csv += `Poisonous Found,${stats.poisonous}\n`;
-    csv += `Suspicious Found,${stats.suspicious}\n`;
-    csv += `Today Identifications,${stats.todayCount}\n`;
-    csv += `This Week Identifications,${stats.weekCount}\n`;
-    csv += `Total Users,${stats.totalUsers}\n\n`;
-    csv += 'SPECIES DISTRIBUTION\nSpecies,Count\n';
+    csv += 'Metric,Value,Percentage\n';
+    csv += `Total Identifications,${stats.total},100%\n`;
+    csv += `Edible,${stats.edible},${edPct}%\n`;
+    csv += `Poisonous,${stats.poisonous},${poisPct}%\n`;
+    csv += `Suspicious,${stats.suspicious},${susPct}%\n`;
+    csv += `Today,${stats.todayCount},\n`;
+    csv += `This Week,${stats.weekCount},\n`;
+    csv += `Total Users,${stats.totalUsers},\n\n`;
+
+    csv += 'SPECIES DISTRIBUTION\n';
+    csv += 'Rank,Species,Count,Toxicity\n';
     if (stats.speciesDistribution) {
-      stats.speciesDistribution.forEach(s => { csv += `${s._id},${s.count}\n`; });
+      const poisList = ['amanita', 'cortinarius', 'entoloma', 'poisonous_fungi'];
+      const edList = ['agaricus', 'boletus', 'hygrocybe', 'lactarius', 'russula', 'suillus', 'edible_fungi'];
+      stats.speciesDistribution.forEach((s, i) => {
+        const name = s._id.toLowerCase();
+        let tox = 'suspicious';
+        if (poisList.includes(name)) tox = 'poisonous';
+        if (edList.includes(name)) tox = 'edible';
+        csv += `${i + 1},${s._id},${s.count},${tox}\n`;
+      });
     }
-    csv += '\nDAILY COUNTS (Last 7 Days)\nDate,Count\n';
+    csv += '\n';
+
+    csv += 'DAILY COUNTS\n';
+    csv += 'Date,Day,Count\n';
     if (stats.dailyCounts) {
-      stats.dailyCounts.forEach(d => { csv += `${d._id},${d.count}\n`; });
+      stats.dailyCounts.forEach(d => {
+        const dayName = new Date(d._id).toLocaleDateString('en-US', { weekday: 'long' });
+        csv += `${d._id},${dayName},${d.count}\n`;
+      });
     }
-    const blob = new Blob([csv], { type: 'text/csv' });
+    csv += '\n';
+
+    csv += 'RECENT ACTIVITY\n';
+    csv += 'Species,Toxicity,Date\n';
+    if (stats.recentActivity) {
+      stats.recentActivity.forEach(a => {
+        csv += `${a.species},${a.toxicity},${new Date(a.createdAt).toLocaleString()}\n`;
+      });
+    }
+    csv += '\n';
+
+    csv += 'SAFETY ANALYSIS\n';
+    csv += 'Metric,Value,Status\n';
+    csv += `Edible Rate,${edPct}%,${parseFloat(edPct) > 50 ? 'GOOD' : 'MONITOR'}\n`;
+    csv += `Danger Rate,${poisPct}%,${parseFloat(poisPct) > 20 ? 'HIGH RISK' : parseFloat(poisPct) > 10 ? 'MODERATE' : 'LOW'}\n`;
+    csv += `Most Common,${stats.speciesDistribution?.[0]?._id || 'N/A'},INFO\n`;
+
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `mushroom-report-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `mushroom-safety-report-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
   };
