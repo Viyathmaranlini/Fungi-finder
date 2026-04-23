@@ -91,7 +91,33 @@ function Chatbot() {
     if (message.includes('bye') || message.includes('goodbye')) {
       return "Goodbye! 👋 Stay safe out there! Remember to always verify mushroom identifications with experts. Feel free to come back anytime you need help! 🍄";
     }
-    
+    if (message.includes('boletus') || message.includes('porcini')) {
+      return mushroomKnowledge['boletus'];
+    }
+    if (message.includes('cortinarius') || message.includes('webcap')) {
+      return mushroomKnowledge['cortinarius'];
+    }
+    if (message.includes('lactarius') || message.includes('milk cap')) {
+      return mushroomKnowledge['lactarius'];
+    }
+    if (message.includes('russula') || message.includes('brittlegill')) {
+      return mushroomKnowledge['russula'];
+    }
+    if (message.includes('hygrocybe') || message.includes('waxcap')) {
+      return mushroomKnowledge['hygrocybe'];
+    }
+    if (message.includes('entoloma') || message.includes('pinkgill')) {
+      return mushroomKnowledge['entoloma'];
+    }
+    if (message.includes('suillus') || message.includes('slippery jack')) {
+      return mushroomKnowledge['suillus'];
+    }
+    if (message.includes('first aid') || message.includes('119') || message.includes('ambulance')) {
+      return mushroomKnowledge['firstaid'];
+    }
+    if (message.includes('sri lanka') || message.includes('lanka') || message.includes('local')) {
+      return mushroomKnowledge['srilanka'];
+    }
     return mushroomKnowledge['default'];
   };
 
