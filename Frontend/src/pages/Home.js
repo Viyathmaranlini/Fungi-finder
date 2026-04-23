@@ -24,8 +24,9 @@ function Home({ setCurrentPage }) {
           </h1>
           
           <p className="hero-description">
-            Advanced artificial intelligence for accurate mushroom identification 
-            and toxicity analysis. Protect yourself with instant safety assessments.
+            AI-powered mushroom identification and toxicity detection system for Sri Lanka. 
+            Upload a photo, get instant species classification with safety warnings, 
+            and help map dangerous mushroom locations across the country.
           </p>
 
           <div className="hero-buttons">
