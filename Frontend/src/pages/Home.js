@@ -107,6 +107,23 @@ function Home({ setCurrentPage }) {
             <p>Keep detailed records of all your identifications with timestamps and locations</p>
             <div className="feature-glow"></div>
           </div>
+          <div className="feature-card">
+            <div className="feature-icon">
+              <span>📈</span>
+            </div>
+            <h3>Analytics Dashboard</h3>
+            <p>Real-time statistics with interactive charts, species distribution, and CSV data export</p>
+            <div className="feature-glow"></div>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">
+              <span>🤖</span>
+            </div>
+            <h3>Smart Assistant</h3>
+            <p>AI chatbot providing mushroom information, emergency contacts, and first aid guidance</p>
+            <div className="feature-glow"></div>
+          </div>
         </div>
       </section>
 
