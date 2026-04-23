@@ -157,9 +157,11 @@ function Chatbot() {
 
   const quickActions = [
     { label: '🚨 Emergency', query: 'emergency' },
+    { label: '🏥 First Aid', query: 'first aid' },
     { label: '☠️ Poisonous', query: 'poisonous' },
     { label: '✅ Edible', query: 'edible' },
     { label: '🔍 Identify', query: 'identify' },
+    { label: 'Sri Lanka', query: 'sri lanka' },
   ];
 
   const formatTime = (date) => {
