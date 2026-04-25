@@ -13,6 +13,7 @@ function Dashboard({ token }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
+  const [dateRange, setDateRange] = useState('all');
 
   const fetchStats = useCallback(async () => {
     try {
@@ -34,7 +35,44 @@ function Dashboard({ token }) {
     fetchStats();
   }, [fetchStats]);
 
- // CSV Export 
+  // Filter stats based on date range
+  const getFilteredStats = () => {
+    if (!stats) return null;
+    if (dateRange === 'all') return stats;
+
+    const now = new Date();
+    let cutoffDate;
+
+    switch (dateRange) {
+      case '7days':
+        cutoffDate = new Date(now.setDate(now.getDate() - 7));
+        break;
+      case '30days':
+        cutoffDate = new Date(now.setDate(now.getDate() - 30));
+        break;
+      case '90days':
+        cutoffDate = new Date(now.setDate(now.getDate() - 90));
+        break;
+      default:
+        return stats;
+    }
+
+    // Filter daily counts
+    const filteredDailyCounts = stats.dailyCounts?.filter(d => new Date(d._id) >= cutoffDate) || [];
+
+    // Filter recent activity  
+    const filteredActivity = stats.recentActivity?.filter(a => new Date(a.createdAt) >= cutoffDate) || [];
+
+    return {
+      ...stats,
+      dailyCounts: filteredDailyCounts,
+      recentActivity: filteredActivity
+    };
+  };
+
+  const filteredStats = getFilteredStats();
+
+  // CSV Export 
   const exportCSV = () => {
     if (!stats) return;
     const edPct = stats.total > 0 ? ((stats.edible / stats.total) * 100).toFixed(1) : 0;
@@ -42,7 +80,8 @@ function Dashboard({ token }) {
     const susPct = stats.total > 0 ? ((stats.suspicious / stats.total) * 100).toFixed(1) : 0;
 
     let csv = 'Mushroom Safety System - Dashboard Report\n';
-    csv += `Generated,${new Date().toLocaleString()}\n\n`;
+    csv += `Generated,${new Date().toLocaleString()}\n`;
+    csv += `Date Range,${dateRange === 'all' ? 'All Time' : dateRange}\n\n`;
 
     csv += 'SUMMARY STATISTICS\n';
     csv += 'Metric,Value,Percentage\n';
@@ -98,7 +137,7 @@ function Dashboard({ token }) {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `mushroom-safety-report-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `mushroom-safety-report-${dateRange}-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -174,7 +213,7 @@ function Dashboard({ token }) {
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
       days.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
-      const found = stats.dailyCounts?.find(d => d._id === dateStr);
+      const found = filteredStats.dailyCounts?.find(d => d._id === dateStr);
       counts.push(found ? found.count : 0);
     }
     return { days, counts };
@@ -204,7 +243,7 @@ function Dashboard({ token }) {
       const monthLabel = date.toLocaleDateString('en-US', { month: 'short' });
       months.push(monthLabel);
       const monthStr = date.toISOString().slice(0, 7);
-      const count = stats.dailyCounts?.filter(d => d._id.startsWith(monthStr)).reduce((sum, d) => sum + d.count, 0) || 0;
+      const count = filteredStats.dailyCounts?.filter(d => d._id.startsWith(monthStr)).reduce((sum, d) => sum + d.count, 0) || 0;
       monthlyCounts.push(count);
     }
     return { months, monthlyCounts };
@@ -301,6 +340,13 @@ function Dashboard({ token }) {
   const showDangerAlert = stats.total > 0 && parseFloat(poisonousPercent) > 10;
   const top3Species = stats.speciesDistribution?.slice(0, 3) || [];
 
+  const dateRangeLabel = {
+    'all': 'All Time',
+    '7days': 'Last 7 Days',
+    '30days': 'Last 30 Days',
+    '90days': 'Last 90 Days'
+  };
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
@@ -311,6 +357,17 @@ function Dashboard({ token }) {
           </p>
         </div>
         <div className="header-actions">
+          {/* Date Range Filter */}
+          <select 
+            className="date-range-select" 
+            value={dateRange} 
+            onChange={(e) => setDateRange(e.target.value)}
+          >
+            <option value="all">📅 All Time</option>
+            <option value="7days">📅 Last 7 Days</option>
+            <option value="30days">📅 Last 30 Days</option>
+            <option value="90days">📅 Last 90 Days</option>
+          </select>
           <button className="refresh-btn" onClick={fetchStats}>🔄 Refresh</button>
           <button className="export-btn" onClick={exportCSV}>📥 Export CSV</button>
         </div>
@@ -455,10 +512,10 @@ function Dashboard({ token }) {
       {/* Bottom Section */}
       <div className="activity-section">
         <div className="activity-card">
-          <h3>🕐 Recent Activity</h3>
+          <h3>🕐 Recent Activity {dateRange !== 'all' && `(${dateRangeLabel[dateRange]})`}</h3>
           <div className="activity-list">
-            {stats.recentActivity && stats.recentActivity.length > 0 ? (
-              stats.recentActivity.map((activity) => (
+            {filteredStats.recentActivity && filteredStats.recentActivity.length > 0 ? (
+              filteredStats.recentActivity.map((activity) => (
                 <div key={activity._id} className={`activity-item ${activity.toxicity}`}>
                   <span className="activity-icon">{getToxicityIcon(activity.toxicity)}</span>
                   <div className="activity-details">
