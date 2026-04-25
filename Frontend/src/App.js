@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 import Navbar from './components/Navbar';
+import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import Identify from './pages/Identify';
 import History from './pages/History';
@@ -116,9 +117,11 @@ function App() {
         user={user}
         onLogout={handleLogout}
       />
-      <main className="main-content" key={currentPage}>
-        {renderPage()}
-      </main>
+      <ErrorBoundary onNavigateHome={() => setCurrentPage('home')}>
+        <main className="main-content" key={currentPage}>
+          {renderPage()}
+        </main>
+      </ErrorBoundary>
 
       {/* Footer - show on most pages */}
       {!['login', 'register', 'chatbot'].includes(currentPage) && (
@@ -143,7 +146,7 @@ function App() {
               <p>🚨 Emergency: 119</p>
               <p>🚑 Ambulance: 1990</p>
               <p>☎️ Poison Centre:</p>
-              <p>   +94 12 3456789</p>
+              <p>   +94 11 2691111</p>
             </div>
           </div>
           <div className="footer-bottom">
