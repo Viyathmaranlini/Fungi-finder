@@ -7,11 +7,13 @@ function Chatbot() {
       id: 1,
       type: 'bot',
       text: "Hello! 👋 I'm your Mushroom Safety Assistant. I can help you with:\n\n• Mushroom identification questions\n• Toxicity information\n• Safety guidelines\n• Emergency procedures\n\nHow can I help you today?",
-      time: new Date()
+      time: new Date(),
+      feedback: null
     }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [feedbackStats, setFeedbackStats] = useState({ helpful: 0, notHelpful: 0 });
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -21,6 +23,18 @@ function Chatbot() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Load feedback stats from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('chatbot_feedback');
+    if (saved) {
+      try {
+        setFeedbackStats(JSON.parse(saved));
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, []);
 
   const mushroomKnowledge = {
     'poisonous': "☠️ **Poisonous Mushrooms Warning**\n\nThe most dangerous mushrooms include:\n• **Amanita phalloides (Death Cap)** - Extremely deadly\n• **Amanita virosa (Destroying Angel)** - Fatal if consumed\n• **Cortinarius rubellus** - Causes kidney failure\n\n⚠️ NEVER eat wild mushrooms unless identified by an expert!",
@@ -121,6 +135,31 @@ function Chatbot() {
     return mushroomKnowledge['default'];
   };
 
+  // Handle feedback for bot messages
+  const handleFeedback = (messageId, feedbackType) => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === messageId && msg.type === 'bot') {
+        return { ...msg, feedback: feedbackType };
+      }
+      return msg;
+    }));
+
+    // Update feedback stats
+    const newStats = { ...feedbackStats };
+    if (feedbackType === 'helpful') {
+      newStats.helpful += 1;
+    } else {
+      newStats.notHelpful += 1;
+    }
+    setFeedbackStats(newStats);
+    localStorage.setItem('chatbot_feedback', JSON.stringify(newStats));
+    localStorage.setItem(`feedback_${messageId}`, JSON.stringify({
+      messageId,
+      feedback: feedbackType,
+      timestamp: new Date().toISOString()
+    }));
+  };
+
   const handleSend = () => {
     if (!input.trim()) return;
 
@@ -128,7 +167,8 @@ function Chatbot() {
       id: messages.length + 1,
       type: 'user',
       text: input,
-      time: new Date()
+      time: new Date(),
+      feedback: null
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -141,7 +181,8 @@ function Chatbot() {
         id: messages.length + 2,
         type: 'bot',
         text: getBotResponse(input),
-        time: new Date()
+        time: new Date(),
+        feedback: null
       };
       setMessages(prev => [...prev, botResponse]);
       setIsTyping(false);
@@ -168,6 +209,9 @@ function Chatbot() {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const totalFeedback = feedbackStats.helpful + feedbackStats.notHelpful;
+  const helpfulRate = totalFeedback > 0 ? ((feedbackStats.helpful / totalFeedback) * 100).toFixed(0) : 0;
+
   return (
     <div className="chatbot-page">
       <div className="chatbot-container">
@@ -177,6 +221,12 @@ function Chatbot() {
             <h2>Mushroom Safety Assistant</h2>
             <span className="status">● Online</span>
           </div>
+          {totalFeedback > 0 && (
+            <div className="feedback-summary">
+              <span className="feedback-rate">👍 {helpfulRate}% helpful</span>
+              <span className="feedback-count">{totalFeedback} ratings</span>
+            </div>
+          )}
         </div>
 
         <div className="quick-actions">
@@ -211,6 +261,35 @@ function Chatbot() {
                   ))}
                 </div>
                 <span className="message-time">{formatTime(message.time)}</span>
+                
+                {/* Feedback buttons for bot messages */}
+                {message.type === 'bot' && message.id > 1 && (
+                  <div className="message-feedback">
+                    {message.feedback === null ? (
+                      <>
+                        <span className="feedback-label">Was this helpful?</span>
+                        <button 
+                          className="feedback-btn helpful"
+                          onClick={() => handleFeedback(message.id, 'helpful')}
+                          title="Helpful"
+                        >
+                          👍
+                        </button>
+                        <button 
+                          className="feedback-btn not-helpful"
+                          onClick={() => handleFeedback(message.id, 'not-helpful')}
+                          title="Not helpful"
+                        >
+                          👎
+                        </button>
+                      </>
+                    ) : (
+                      <span className="feedback-given">
+                        {message.feedback === 'helpful' ? '👍 Thanks for your feedback!' : '👎 We\'ll try to improve!'}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
               {message.type === 'user' && <div className="message-avatar user">👤</div>}
             </div>
@@ -264,6 +343,17 @@ function Chatbot() {
           <span className="tip-icon">🚨</span>
           <p>If poisoning suspected, call emergency services immediately</p>
         </div>
+
+        {/* Feedback Statistics Card */}
+        {totalFeedback > 0 && (
+          <div className="tip-card feedback-stats-card">
+            <span className="tip-icon">📊</span>
+            <div>
+              <p style={{ fontWeight: '600', marginBottom: '5px' }}>Response Quality</p>
+              <p>{helpfulRate}% found helpful ({feedbackStats.helpful}/{totalFeedback})</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
