@@ -1,0 +1,126 @@
+.error-boundary {
+  min-height: calc(100vh - 75px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.error-boundary-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 24px;
+  padding: 50px 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: errorSlideIn 0.5s ease-out forwards;
+}
+
+@keyframes errorSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.error-boundary-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: errorPulse 2s ease-in-out infinite;
+}
+
+@keyframes errorPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.error-boundary-card h2 {
+  color: #fff;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.error-boundary-message {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.error-boundary-details {
+  background: rgba(255, 118, 117, 0.08);
+  border: 1px solid rgba(255, 118, 117, 0.2);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.error-boundary-details summary {
+  color: #ff7675;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.error-boundary-details pre {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.error-boundary-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.error-boundary-btn {
+  padding: 14px 30px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.error-boundary-btn.retry {
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+}
+
+.error-boundary-btn.retry:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 184, 148, 0.45);
+}
+
+.error-boundary-btn.home {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.error-boundary-btn.home:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 500px) {
+  .error-boundary-card {
+    padding: 35px 25px;
+  }
+  .error-boundary-actions {
+    flex-direction: column;
+  }
+}
