@@ -1,92 +1,279 @@
-## Fungi-finder 🍄
-AI-powered web application for wild mushroom identification and toxicity detection with record management and statistical software.
+# 🍄 FungiFinder — Wild Mushroom Identification & Toxicity Detection System
+ 
+> AI-powered web application for wild mushroom identification and toxicity detection with record management, statistical analytics, and emergency guidance — built for Sri Lanka.
 
-## About
+## 📋 About
+ 
+Mushroom poisoning is a significant public health concern in Sri Lanka, where traditional foraging practices often lead to misidentification of toxic species. FungiFinder addresses this gap by providing an AI-powered web application that helps users identify wild mushrooms, assess their toxicity level, and make safer decisions.
+ 
+The system combines deep learning image classification with GPS tracking, interactive mapping, analytics dashboards, and an emergency-ready chatbot assistant — all accessible through a modern web interface.
+ 
+---
+ 
+## ✨ Features
+ 
+### Core AI Features
+- **AI Mushroom Identification** — Upload mushroom images for real-time species classification using MobileNetV2 CNN trained on 8,611 images across 12 species
+- **Three-Tier Toxicity Classification** — Edible, Poisonous, Suspicious with context-sensitive safety warnings
+- **Non-Mushroom Detection** — Rejects non-mushroom images using prediction entropy analysis (Shannon entropy + confidence gap)
+- **Fake Image Detection** — Detects cartoon/illustration images using color variety, edge pattern, saturation, and background uniformity analysis
+- **Responsible AI Disclaimer** — Confirmation modal before identification with accuracy limitations clearly stated
+### Data & Analytics
+- **Analytics Dashboard** — Interactive charts using Chart.js (toxicity distribution, species bar chart, weekly trends, monthly trends)
+- **Date Range Filter** — Filter dashboard data by All Time, Last 7 Days, 30 Days, or 90 Days
+- **CSV Export** — Export dashboard statistics for research purposes
+- **Records Management** — Store identifications with GPS coordinates, search, filter, sort, grid/list view toggle
+### Map & Location
+- **Interactive Sighting Map** — GPS-tagged mushroom sightings on Leaflet.js map centered on Sri Lanka
+- **Toxicity Filter Toggles** — Show/hide edible, poisonous, suspicious markers on map
+- **Color-Coded Markers** — Green (edible), Yellow (suspicious), Red (poisonous)
+### User Management & Security
+- **JWT Authentication** — Secure login/register with token-based sessions
+- **Role-Based Access Control** — Three roles: User, Researcher, Admin
+- **Input Validation** — Password strength enforcement, email format validation, XSS sanitization
+- **Admin Panel** — User management, role changes, records management, system-wide statistics
+### Safety & Support
+- **Chatbot Assistant** — Knowledge base covering 9 mushroom genera with emergency guidance
+- **Chatbot Feedback System** — Thumbs up/down ratings for response quality tracking
+- **Sri Lankan Emergency Contacts** — 119 (Emergency), 1990 (Ambulance), Poison Centre
+- **First Aid Instructions** — Step-by-step guidance for suspected mushroom poisoning
+- **Error Boundary** — Graceful error handling prevents app crashes
+---
 
-The system helps users in Sri Lanka identify wild mushrooms, assess their toxicity level (edible, poisonous, or suspicious), and provides safety warnings and emergency guidance. It combines deep learning image classification with GPS tracking, interactive mapping, analytics dashboards, and an emergency-ready chatbot assistant.
-
-## Features
-
-- **AI Mushroom Identification** — Upload mushroom images for real-time species classification using MobileNetV2 CNN trained on 8,611 images across 12 species classes
-- **Toxicity Classification** — Three-tier system: Edible, Poisonous, Suspicious with context-sensitive safety warnings
-- **Non-Mushroom Detection** — Rejects non-mushroom images using prediction entropy analysis
-- **Fake Image Detection** — Detects cartoon/illustration images using color variety, edge pattern, and saturation analysis
-- **Analytics Dashboard** — Interactive charts using Chart.js (toxicity pie chart, species bar chart, weekly trends line chart)
-- **Interactive Map** — GPS-tagged mushroom sightings on Leaflet.js map with toxicity filter toggles
-- **Records Management** — Store identifications with GPS coordinates, view personal history, delete records
-- **Admin Panel** — User management, role changes, records management, system statistics
-- **Chatbot Assistant** — Mushroom knowledge base covering 9 genera with Sri Lankan emergency contacts and first aid instructions
-- **Authentication** — JWT-based login/register with role-based access control (User, Researcher, Admin)
-- **CSV Export** — Export dashboard statistics for research use
-
-## Tech Stack
-
+## 🏗️ System Architecture
+ 
+```
+┌─────────────────────────────────────────────────────────┐
+│                    User (Web Browser)                     │
+│              Chrome / Firefox / Edge                      │
+└──────────────────────┬──────────────────────────────────┘
+                       │ HTTP Request
+┌──────────────────────▼──────────────────────────────────┐
+│              React.js Frontend (Port 3000)                │
+│  ┌──────────┬───────────┬──────┬─────────┬────────────┐ │
+│  │ Identify │ Dashboard │ Map  │ Records │  Chatbot   │ │
+│  │          │ (Chart.js)│(Leaf)│         │            │ │
+│  └──────────┴───────────┴──────┴─────────┴────────────┘ │
+└──────────────────────┬──────────────────────────────────┘
+                       │ Axios REST API + JWT Token
+┌──────────────────────▼──────────────────────────────────┐
+│           Node.js + Express.js Backend (Port 5000)       │
+│  ┌────────────┬──────────────┬───────────┬────────────┐ │
+│  │ Auth Routes│Identify Route│Admin Route│Record Route│ │
+│  │ (JWT/bcrypt)│(Multer upload)│(RBAC)   │(History)   │ │
+│  └────────────┴──────┬───────┴───────────┴────────────┘ │
+│                      │                                    │
+│              ┌───────▼────────┐    ┌──────────────────┐  │
+│              │  Flask AI      │    │  MongoDB Atlas    │  │
+│              │  Service       │    │  Cloud Database   │  │
+│              │  (Port 5001)   │    │  (M0 Free Tier)  │  │
+│              │                │    │                   │  │
+│              │  MobileNetV2   │    │  ┌─────────────┐ │  │
+│              │  + Entropy     │    │  │ users       │ │  │
+│              │  + Image QA    │    │  │ identific.  │ │  │
+│              │                │    │  └─────────────┘ │  │
+│              └────────────────┘    └──────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
+ 
+---
+ 
+## 🧠 AI Model Details
+ 
+| Property | Value |
+|----------|-------|
+| Architecture | MobileNetV2 (Transfer Learning from ImageNet) |
+| Input Size | 224 × 224 × 3 (RGB) |
+| Training Dataset | 8,611 mushroom images |
+| Species Classes | 12 (Agaricus, Amanita, Boletus, Cortinarius, Edible_Fungi, Entoloma, Hygrocybe, Lactarius, Mushrooms, Poisonous_Fungi, Russula, Suillus) |
+| Training Accuracy | 80.7% |
+| Training Approach | Two-phase: Feature extraction (10 epochs) → Fine-tuning (10 epochs) |
+| Model Size | ~14MB (.h5 format) |
+| Inference Time | < 3 seconds |
+ 
+### Hybrid Five-Layer Safety Architecture
+ 
+```
+Layer 1: CNN Classification (MobileNetV2 + Transfer Learning)
+    ↓
+Layer 2: Non-Mushroom Detection (Prediction Entropy Analysis)
+    ↓
+Layer 3: Fake Image Detection (Image Quality Analysis)
+    ↓
+Layer 4: Rule-Based Toxicity Mapping (Edible / Poisonous / Suspicious)
+    ↓
+Layer 5: Confidence-Based Safety Warnings
+```
+ 
+### Version-Wise Model Evaluation
+ 
+| Version | Description | Accuracy | F1-Score |
+|---------|------------|----------|----------|
+| V1 | Base (No Augmentation, Phase 1 Only) | 73.20% | 72.52% |
+| V2 | With Data Augmentation (Phase 1) | 69.59% | 69.10% |
+| V3 | Augmentation + Fine-tuning (Final) | 79.07% | 78.89% |
+ 
+---
+ 
+## 🛠️ Tech Stack
+ 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| Frontend | React.js | Single-page application UI |
+| Frontend | React.js 19 | Single-page application UI |
 | Frontend | Chart.js | Dashboard data visualization |
 | Frontend | Leaflet.js | Interactive sightings map |
 | Frontend | Axios | HTTP client for API calls |
-| Backend | Node.js + Express.js | REST API server |
+| Backend | Node.js + Express.js 5 | REST API server |
 | Backend | Mongoose | MongoDB ODM |
 | Backend | jsonwebtoken | JWT authentication |
-| Backend | bcryptjs | Password hashing |
+| Backend | bcryptjs | Password hashing (12 salt rounds) |
 | Backend | Multer | Image file upload handling |
-| AI Service | Python + Flask | AI prediction API |
+| AI Service | Python + Flask | AI prediction microservice |
 | AI Service | TensorFlow / Keras | MobileNetV2 deep learning model |
-| AI Service | Pillow | Image preprocessing |
-| Database | MongoDB Atlas | Cloud NoSQL database |
+| AI Service | Pillow + NumPy | Image preprocessing |
+| Database | MongoDB Atlas | Cloud NoSQL database (M0 Free Tier) |
 | Training | Google Colab | GPU-accelerated model training |
-
-
-## Project Structure
+| Testing | Postman | REST API endpoint testing |
+| Version Control | Git + GitHub | Source code management |
+ 
+---
+## 📁 Project Structure
  
 ```
-mushroom-safety-system/
-├── frontend/               # React.js frontend application
+Fungi-finder/
+├── frontend/                   # React.js frontend application
 │   ├── public/
+│   │   ├── index.html
+│   │   └── manifest.json
 │   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── App.js          # Main app with routing
-│   │   └── App.css         # Global styles
+│   │   ├── components/
+│   │   │   ├── Navbar.js       # Navigation with role-based links
+│   │   │   ├── Navbar.css
+│   │   │   ├── ErrorBoundary.js # Graceful error handling
+│   │   │   └── ErrorBoundary.css
+│   │   ├── pages/
+│   │   │   ├── Home.js         # Landing page with features
+│   │   │   ├── Identify.js     # Image upload + AI identification
+│   │   │   ├── Dashboard.js    # Analytics with Chart.js
+│   │   │   ├── Map.js          # Leaflet.js sighting map
+│   │   │   ├── History.js      # Records with search/filter/sort
+│   │   │   ├── Chatbot.js      # AI assistant with feedback
+│   │   │   ├── AdminPanel.js   # Admin management panel
+│   │   │   ├── Login.js        # User login
+│   │   │   └── Register.js     # User registration
+│   │   ├── App.js              # Main app with routing + ErrorBoundary
+│   │   ├── App.css
+│   │   ├── index.js
+│   │   └── index.css           # Global styles + CSS variables
 │   └── package.json
 │
-├── backend/                # Node.js + Express.js API server
-│   ├── models/             # Mongoose schemas (User, Identification)
-│   ├── routes/             # API route handlers (auth, identify, admin)
-│   ├── middleware/         # JWT auth and role-based access middleware
-│   ├── uploads/            # Stored mushroom images
-│   ├── server.js           # Main server entry point
-│   └── .env                # Environment variables (not committed)
+├── backend/                    # Node.js + Express.js API server
+│   ├── models/
+│   │   ├── User.js             # User schema (name, email, password, role)
+│   │   └── Identification.js   # Identification schema (species, toxicity, GPS)
+│   ├── routes/
+│   │   ├── auth.js             # Register/Login with input validation
+│   │   ├── identify.js         # Image upload, AI proxy, CRUD operations
+│   │   ├── records.js          # User records, map data, statistics
+│   │   └── admin.js            # Admin dashboard, user/record management
+│   ├── middleware/
+│   │   └── auth.js             # JWT verification middleware
+│   ├── app/ml/models/
+│   │   ├── mushroom_model.h5   # Trained MobileNetV2 model
+│   │   └── class_names.json    # Species classes + accuracy metadata
+│   ├── uploads/                # Stored mushroom images
+│   ├── server.js               # Express server entry point
+│   ├── create-admin.js         # Admin account creation utility
+│   ├── seedMapData.js          # Sample Sri Lanka sighting data (20 records)
+│   ├── .env                    # Environment variables
+│   └── package.json
 │
-├── ai-service/             # Flask AI prediction service
-│   ├── run_ai_service.py   # Flask server with prediction endpoint
-│   ├── model.h5            # Trained MobileNetV2 model (not committed)
-│   └── class_names.json    # Species class mapping
+├── ai-service/                 # Flask AI prediction microservice
+│   ├── app.py                  # Basic Flask prediction server
+│   └── .gitignore
 │
-└── training/               # Model training scripts
-    └── train_model.ipynb   # Google Colab training notebook
+├── training/                   # Model training pipeline
+│   ├── train_model.py          # Full training script (dataset download → model export)
+│   ├── run_ai_service.py       # Enhanced Flask server (entropy + image QA)
+│   ├── combined_data/          # Training images (12 species folders)
+│   └── data/                   # Raw downloaded datasets
+│
+├── .gitignore
+├── .gitattributes
+└── README.md
 ```
-## Prerequisites
+ 
+---
+ 
+## 🚀 Installation & Setup
+ 
+### Prerequisites
  
 - Node.js v18+
 - Python 3.9+
-- MongoDB Atlas account
-
-## Installation and Setup
- 
-### 1. Clone the repository
+- MongoDB Atlas account (free M0 tier)
+- Git
+### 1. Clone the Repository
  
 ```bash
-git clone https://github.com/YOUR_USERNAME/mushroom-safety-system.git
-cd mushroom-safety-system
+git clone https://github.com/Viyathmaranlini/Fungi-finder.git
+cd Fungi-finder
 ```
  
-### 2. Frontend Setup
+### 2. Backend Setup
+ 
+```bash
+cd backend
+npm install
+```
+ 
+Create `.env` file in the backend folder:
+ 
+```env
+PORT=5000
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/mushroom_safety
+JWT_SECRET=your_secret_key_here
+```
+ 
+Create admin account (optional):
+ 
+```bash
+node create-admin.js
+```
+ 
+Seed sample map data (optional):
+ 
+```bash
+node seedMapData.js
+```
+ 
+Start the backend server:
+ 
+```bash
+node server.js
+```
+ 
+### 3. AI Service Setup
+ 
+```bash
+cd training
+pip install tensorflow flask flask-cors pillow numpy
+python run_ai_service.py
+```
+### 4. Frontend Setup
  
 ```bash
 cd frontend
 npm install
 npm start
 ```
+ 
+### 5. Access the Application
+ 
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:5000 |
+| AI Service | http://localhost:5001 |
+ 
+---
