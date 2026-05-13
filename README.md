@@ -109,9 +109,9 @@ Layer 5: Confidence-Based Safety Warnings
  
 | Version | Description | Accuracy | F1-Score |
 |---------|------------|----------|----------|
-| V1 | Base (No Augmentation, Phase 1 Only) | 73.20% | 72.52% |
-| V2 | With Data Augmentation (Phase 1) | 69.59% | 69.10% |
-| V3 | Augmentation + Fine-tuning (Final) | 79.07% | 78.89% |
+| V1 | Base (No Augmentation, Phase 1 Only) | 72.03% | 71.66% |
+| V2 | With Data Augmentation (Phase 1) | 67.09% | 66.54% |
+| V3 | Augmentation + Fine-tuning (Final) | 78.72% | 78.52% |
  
 ---
  
