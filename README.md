@@ -231,20 +231,8 @@ Create `.env` file in the backend folder:
  
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/mushroom_safety
-JWT_SECRET=your_secret_key_here
-```
- 
-Create admin account (optional):
- 
-```bash
-node create-admin.js
-```
- 
-Seed sample map data (optional):
- 
-```bash
-node seedMapData.js
+MONGODB_URI=mongodb+srv://DR_Viyathma:RDta-110@cluster0.dipsffd.mongodb.net/mushroom_safety?appName=Cluster0
+JWT_SECRET=mushroom_safety_secret_key_2024
 ```
  
 Start the backend server:
@@ -256,9 +244,9 @@ node server.js
 ### 3. AI Service Setup
  
 ```bash
-cd training
+cd ai-service
 pip install tensorflow flask flask-cors pillow numpy
-python run_ai_service.py
+python app.py
 ```
 ### 4. Frontend Setup
  
