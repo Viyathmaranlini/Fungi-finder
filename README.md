@@ -235,11 +235,21 @@ MONGODB_URI=mongodb+srv://DR_Viyathma:RDta-110@cluster0.dipsffd.mongodb.net/mush
 JWT_SECRET=mushroom_safety_secret_key_2024
 ```
  
-Start the backend server:
- 
 ```bash
 node server.js
 ```
+ ### Default Admin Account
+
+To create an admin account, run:
+```bash
+node create-admin.js
+```
+
+Admin credentials:
+- Email: admin@mushroom.com
+- Password: Admin@123
+Start the backend server:
+ 
  
 ### 3. AI Service Setup
  
