@@ -231,8 +231,8 @@ Create `.env` file in the backend folder:
  
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://DR_Viyathma:RDta-110@cluster0.dipsffd.mongodb.net/mushroom_safety?appName=Cluster0
-JWT_SECRET=mushroom_safety_secret_key_2024
+MONGODB_URI=your_mongodb_connection_string_here
+JWT_SECRET=your_secret_key_here
 ```
  
 ```bash
