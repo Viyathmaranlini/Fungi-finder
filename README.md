@@ -234,7 +234,10 @@ PORT=5000
 MONGODB_URI=your_mongodb_connection_string_here
 JWT_SECRET=your_secret_key_here
 ```
- 
+> Note for Evaluators: The .env file with actual database 
+> credentials is included in the Plymouth OneDrive submission.
+
+Start the backend server:
 ```bash
 node server.js
 ```
